@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Facebook Login JavaScript Example</title>
+<meta charset="UTF-8">
+</head>
+<body>
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '{your-app-id}', // Replace {your-app-id} with your actual app ID
+      cookie     : true,
+      xfbml      : true,
+      version    : 'v12.0'
+    });
+      
+    FB.AppEvents.logPageView();   
+      
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    }); 
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "https://connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+
+  // This function is called when someone finishes with the Login Button.
+  function checkLoginState() {
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+  }
+
+  function statusChangeCallback(response) {
+    console.log('Login Status:', response);
+    if (response.status === 'connected') {
+      // Logged into your webpage and Facebook.
+      console.log('Successfully logged in with Facebook');
+      // TODO: Redirect or perform actions after successful login
+      // For example, redirect to another page
+      window.location.href = 'page_to_list_apps.html'; // Specify your redirect URL
+    } else {
+      // The person is not logged into your webpage or we are unable to tell. 
+      console.log('Please log into this webpage.');
+    }
+  }
+</script>
+
+<!-- The Login Button -->
+<fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+</fb:login-button>
+
+<div id="status"></div>
+
+</body>
+</html>
