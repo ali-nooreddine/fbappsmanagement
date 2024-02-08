@@ -6,16 +6,49 @@
     <title>User Profile</title>
 </head>
 <body>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+    <script>
+        window.fbAsyncInit = function() {
+          FB.init({
+            appId            : '914757896878869', // Replace with your Facebook app ID
+            autoLogAppEvents : true,
+            xfbml            : true,
+            version          : 'v12.0' // Use the latest version number
+          });
+      
+          FB.AppEvents.logPageView();
+      
+          // Check if the user is already logged in
+          FB.getLoginStatus(function(response) {
+            if (response.status === 'connected') {
+              // The user is logged in and has authenticated your app
+              getUserInfo();
+            } else {
+              // The user is not logged in to Facebook or hasn't authenticated your app
+              // Optional: Implement login function
+            }
+          });
+        };
+      
+        function getUserInfo() {
+          FB.api('/me', {fields: 'name,email,picture'}, function(response) {
+            console.log('User Name: ' + response.name);
+            console.log('User Email: ' + response.email);
+            // To display the user's profile picture:
+            var profilePic = response.picture.data.url;
+            document.getElementById('user-pic').setAttribute('src', profilePic);
+            // Similarly, set the other user info in the HTML
+          });
+        }
+      </script>
     <header>
         <h1>User Profile</h1>
     </header>
-    <section>
-        <img src="{{ProfilePictureUrl}}" alt="Profile Picture" />
-        <h2>Name: {{Name}}</h2>
-        <p>Email: {{Email}}</p>
-        <p>Location: {{Location}}</p>
-        <!-- Add additional fields as necessary -->
-    </section>
+    <div>
+        <img id="user-pic" src="#" alt="User profile picture">
+        <p id="user-name"></p>
+        <p id="user-email"></p>
+      </div>
     <footer>
         <p>&copy; [Year] [Your Company or Application Name]. All rights reserved.</p>
     </footer>
