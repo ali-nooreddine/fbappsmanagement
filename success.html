@@ -2,55 +2,51 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
+    <title>Success - Facebook Login</title>
 </head>
 <body>
-    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+    <h1>Login Successful</h1>
+    <div id="user-info">
+        <img id="user-pic" src="" alt="User profile picture" style="width: 100px; height: 100px;">
+        <p id="user-name">User Name: </p>
+        <p id="user-email">User Email: </p>
+    </div>
+
     <script>
         window.fbAsyncInit = function() {
-          FB.init({
-            appId            : '914757896878869', // Replace with your Facebook app ID
-            autoLogAppEvents : true,
-            xfbml            : true,
-            version          : 'v12.0' // Use the latest version number
-          });
-      
-          FB.AppEvents.logPageView();
-      
-          // Check if the user is already logged in
-          FB.getLoginStatus(function(response) {
-            if (response.status === 'connected') {
-              // The user is logged in and has authenticated your app
-              getUserInfo();
-            } else {
-              // The user is not logged in to Facebook or hasn't authenticated your app
-              // Optional: Implement login function
-            }
-          });
+            FB.init({
+                appId      : '914757896878869', // Use your App ID
+                cookie     : true,
+                xfbml      : true,
+                version    : 'v12.0'
+            });
+
+            FB.getLoginStatus(function(response) {
+                if (response.status === 'connected') {
+                    fetchUserProfile();
+                } else {
+                    // User not logged in or not authorized the app
+                    console.log('User not authorized or not logged in.');
+                }
+            });
         };
-      
-        function getUserInfo() {
-          FB.api('/me', {fields: 'name,email,picture'}, function(response) {
-            console.log('User Name: ' + response.name);
-            console.log('User Email: ' + response.email);
-            // To display the user's profile picture:
-            var profilePic = response.picture.data.url;
-            document.getElementById('user-pic').setAttribute('src', profilePic);
-            // Similarly, set the other user info in the HTML
-          });
+
+        (function(d, s, id){
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) { return; }
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+        function fetchUserProfile() {
+            FB.api('/me', {fields: 'name,email,picture'}, function(response) {
+                console.log(response);
+                document.getElementById('user-name').innerHTML = 'User Name: ' + response.name;
+                document.getElementById('user-email').innerHTML = 'User Email: ' + response.email;
+                document.getElementById('user-pic').src = response.picture.data.url;
+            });
         }
-      </script>
-    <header>
-        <h1>User Profile</h1>
-    </header>
-    <div>
-        <img id="user-pic" src="#" alt="User profile picture">
-        <p id="user-name"></p>
-        <p id="user-email"></p>
-      </div>
-    <footer>
-        <p>&copy; [Year] [Your Company or Application Name]. All rights reserved.</p>
-    </footer>
+    </script>
 </body>
 </html>
