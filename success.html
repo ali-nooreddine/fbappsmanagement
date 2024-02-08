@@ -40,7 +40,7 @@
         }(document, 'script', 'facebook-jssdk'));
 
         function fetchUserProfile() {
-            FB.api('/me', {fields: 'name,email,picture'}, function(response) {
+            FB.api('/me', {fields: 'name,email'}, function(response) {
                 console.log(response);
                 document.getElementById('user-name').innerHTML = 'User Name: ' + response.name;
                 document.getElementById('user-email').innerHTML = 'User Email: ' + response.email;
